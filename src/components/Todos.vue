@@ -7,20 +7,26 @@
     <p> We Have {{ todos.length }} Todos Uncompleted </p>
 
     <!-- display our todos -->
-    <div class="row">
-      <div class="card col-sm-3" v-for="(todo, index) in todos" v-bind:key="index" @click="goToDetailsPage(todo.todo)" style="border: 2px solid black">
-        <div class="card-body">
-          <p> {{ todo.todo.title }} </p>
-          <p> {{ todo.todo.completed }} </p>
-          <p> Added By {{ todo.owner.name }} </p>
-        </div>
-      </div>
-    </div><br><hr>
+    <!-- <todo-list-holder v-bind:todos="todos"> </todo-list-holder> -->
+    <zero :todos="todos"></zero>
+
+    <!--
+    <div>
+      <ul>
+        <li v-for="(todo, index) in todos" v-bind:todo="todo" v-bind:key="index" >
+           {{ todo.todo.title }}
+        </li>
+      </ul>
+    </div>
+    -->
 
   </div>
 </template>
 
 <script>
+import TodoListHolder from './TodoListHolder.vue'
+import Zero from './Zero.vue'
+
 export default {
   name: 'Todos',
 
@@ -68,7 +74,11 @@ export default {
         })
     } // end of set_users
 
-  }// end of methods
+  }, // end of methods
+
+  components: {
+    TodoListHolder, Zero
+  }
 
 }
 </script>
