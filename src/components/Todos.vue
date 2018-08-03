@@ -8,10 +8,11 @@
 
     <!-- display our todos -->
     <div class="row">
-      <div class="card col-sm-3" v-for="(todo, index) in todos" v-bind:key="index" @click="goToDetailsPage(todo)" style="border: 2px solid black">
+      <div class="card col-sm-3" v-for="(todo, index) in todos" v-bind:key="index" @click="goToDetailsPage(todo.todo)" style="border: 2px solid black">
         <div class="card-body">
-          <p> {{ todo.title }} </p>
-          <p> {{ todo.completed }} </p>
+          <p> {{ todo.todo.title }} </p>
+          <p> {{ todo.todo.completed }} </p>
+          <p> Added By {{ todo.owner.name }} </p>
         </div>
       </div>
     </div><br><hr>
@@ -26,7 +27,8 @@ export default {
   data () {
     return {
       todos: {},
-      todos_url: 'https://jsonplaceholder.typicode.com/todos'
+      todos_url: 'https://jsonplaceholder.typicode.com/todos',
+      base_url: 'https://jsonplaceholder.typicode.com/'
     }
   },
 
@@ -42,7 +44,8 @@ export default {
         .then((result) => {
           console.log('got data')
           console.log(result)
-          this.todos = result.body
+          let tempTodos = result.body
+          this.set_users(tempTodos)
         })
     }, // end of getAll
 
@@ -50,7 +53,20 @@ export default {
     goToDetailsPage (todo) {
       console.log(todo.id)
       this.$router.push({ path: '/todo/' + todo.id })
-    }// end of goToDetailsPage function
+    }, // end of goToDetailsPage function
+
+    // make a todo to be an object of objects
+    // { 'todo': theTodo, 'owner': theUserThatAddedIt }
+    set_users (tempTodos) {
+      this.$http.get(this.base_url + 'users')
+        .then((result) => {
+          let tempUsers = result.body
+          console.log('users')
+          // console.log(tempUsers)
+          this.todos = tempTodos.map((tempTodo) => { return { 'todo': tempTodo, 'owner': tempUsers.filter((tempUser) => { return tempUser.id === tempTodo.userId })[0] } })
+          console.log(this.todos)
+        })
+    } // end of set_users
 
   }// end of methods
 

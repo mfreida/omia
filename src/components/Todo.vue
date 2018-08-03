@@ -5,8 +5,9 @@
     <div class="row">
       <div class="card col-sm-3">
         <div class="card-body">
-          <p> {{ todo.title }} </p>
-          <p> {{ todo.completed }} </p>
+          <p> {{ todo.todo.title }} </p>
+          <p> {{ todo.todo.completed }} </p>
+          <p> By {{ todo.owner.name }} </p>
         </div>
       </div>
     </div><br><hr>
@@ -21,7 +22,8 @@ export default {
   data () {
     return {
       todo: {},
-      todos_url: 'https://jsonplaceholder.typicode.com/todos/'
+      todos_url: 'https://jsonplaceholder.typicode.com/todos/',
+      base_url: 'https://jsonplaceholder.typicode.com/'
     }
   },
 
@@ -37,9 +39,20 @@ export default {
         .then((result) => {
           console.log('got data')
           console.log(result)
-          this.todo = result.body
+          let todo = result.body
+
+          this.set_user_details(todo)
         })
-    } // end of getDetails
+    }, // end of getDetails
+
+    // set the user that added this todo
+    set_user_details (todo) {
+      this.$http.get(this.base_url + 'users/' + todo.userId)
+        .then((result) => {
+          // let todoOwner = result.body.filter((user) => { return user.id === todo.userId })
+          this.todo = { 'todo': todo, 'owner': result.body }
+        })
+    }// end of set_user_details
 
   }// end of methods
 
