@@ -1,6 +1,10 @@
 <template>
   <div id="about">
+
+     This App helps managers keep track of tasks that their employees do.
+
      This App Is Managed By {{ maker_name }}
+
   </div>
 </template>
 

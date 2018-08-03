@@ -2,15 +2,33 @@
   <div class="todos">
 
     <!-- display our todos -->
-    <div class="row">
-      <div class="card col-sm-3">
-        <div class="card-body">
-          <p> {{ todo.todo.title }} </p>
-          <p> {{ todo.todo.completed }} </p>
-          <p> By {{ todo.owner.name }} </p>
-        </div>
+    <div class="todo_holder">
+      <div class="card-header">
+        <strong> TASK #{{ todo.todo.id }} </strong>
       </div>
-    </div><br><hr>
+      <div class="card-body col-sm-12">
+        <p> {{ todo.todo.title }} </p>
+        <p v-show="todo.todo.completed" class="badge badge-success"><strong> TASK COMPLETED </strong></p>
+        <p v-show="!todo.todo.completed" class="badge badge-danger"><strong> TASK NOT COMPLETED </strong></p>
+        <p> By {{ todo.owner.name }} </p>
+        <p> Email {{ todo.owner.email }} </p>
+        <p> Phone {{ todo.owner.phone }} </p>
+
+        <!-- show a see more button -->
+        <button class="btn btn-info" type="button" v-show="!seeing_more" @click="seeMore()"> SEE MORE ABOUT EMPLOYEE </button>
+
+        <div v-show="seeing_more">
+          <p> WEBSITE {{ todo.owner.website }} </p>
+          <p> STREET {{ todo.owner.address.street }} </p>
+          <p> SUITE {{ todo.owner.address.suite }} </p>
+          <p> COMPANY BS {{ todo.owner.company.bs }} </p>
+        </div>
+
+        <!-- show a see more button -->
+        <button class="btn btn-info" type="button" v-show="seeing_more" @click="seeMore()"> SEE LESS </button>
+
+      </div>
+    </div><br>
 
   </div>
 </template>
@@ -22,6 +40,7 @@ export default {
   data () {
     return {
       todo: {},
+      seeing_more: false,
       todos_url: 'https://jsonplaceholder.typicode.com/todos/',
       base_url: 'https://jsonplaceholder.typicode.com/'
     }
@@ -52,7 +71,12 @@ export default {
           // let todoOwner = result.body.filter((user) => { return user.id === todo.userId })
           this.todo = { 'todo': todo, 'owner': result.body }
         })
-    }// end of set_user_details
+    }, // end of set_user_details
+
+    // toggle seeing more attribut to its opposite
+    seeMore () {
+      this.seeing_more = !this.seeing_more
+    }
 
   }// end of methods
 

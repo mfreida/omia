@@ -1,10 +1,15 @@
 <template>
-  <div class="todo_holder">
-    <div class="card col-sm-3" v-for="(todo, index) in todos" v-bind:key="index" @click="triggerGoToDetailsPageEvent(todo.todo)" style="border: 2px solid black">
+  <div class="todo_holder col-md-3">
+    <div class="card" @click="triggerGoToDetailsPageEvent(todo.todo)" style="height:200px; margin-right:5px; margin-left:5px; margin-bottom: 5px">
+      <div class="card-header">
+        <span style="margin-right:20px"> <strong>Task #{{ todo.todo.id }}</strong> </span>
+        <span v-show="todo.todo.completed" class="badge badge-success"> Done </span>
+        <span v-show="!todo.todo.completed" class="badge badge-danger"> Pending </span>
+      </div>
       <div class="card-body">
-        <p> {{ todo.todo.title }} </p>
-        <p> {{ todo.todo.completed }} </p>
-        <p> Added By {{ todo.owner.name }} </p>
+        <p class="task-data"> TASK {{ todo.todo.title }} </p>
+        <p class="task-data"> COMPLETED {{ todo.todo.completed }} </p>
+        <p class="task-data"> EMPLOYEE {{ todo.owner.name }} </p>
       </div>
     </div>
   </div>
@@ -36,5 +41,7 @@ export default {
 </script>
 
 <style>
-
+.task-data {
+  margin-left: 10px;
+}
 </style>

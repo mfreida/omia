@@ -1,31 +1,26 @@
 <template>
   <div class="todos">
 
-    <p> We Have {{ todos.length }} Todos </p>
-
-    <p> We Have {{ todos.length }} Todos Completed </p>
-    <p> We Have {{ todos.length }} Todos Uncompleted </p>
+    <ul class="list-inline">
+      <li class="list-inline-item" style="margin-right:20px">
+        We Have {{ todos.length }} Todos
+      </li>
+      <li class="list-inline-item" style="margin-right:20px">
+         We Have {{ todos.filter((todo) => { return todo.todo.completed }).length }} Todos Completed
+      </li>
+      <li class="list-inline-item" style="margin-right:20px">
+         We Have {{ todos.filter((todo) => { return !todo.todo.completed }).length }} Todos Uncompleted
+      </li>
+    </ul>
 
     <!-- display our todos -->
-    <!-- <todo-list-holder v-bind:todos="todos"> </todo-list-holder> -->
-    <zero :todos="todos"></zero>
-
-    <!--
-    <div>
-      <ul>
-        <li v-for="(todo, index) in todos" v-bind:todo="todo" v-bind:key="index" >
-           {{ todo.todo.title }}
-        </li>
-      </ul>
-    </div>
-    -->
+    <todo-list-holder :todos="todos"> </todo-list-holder>
 
   </div>
 </template>
 
 <script>
 import TodoListHolder from './TodoListHolder.vue'
-import Zero from './Zero.vue'
 
 export default {
   name: 'Todos',
@@ -77,7 +72,7 @@ export default {
   }, // end of methods
 
   components: {
-    TodoListHolder, Zero
+    TodoListHolder
   }
 
 }
@@ -85,18 +80,5 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
-  font-weight: normal;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+
 </style>

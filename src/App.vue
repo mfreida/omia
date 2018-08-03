@@ -2,6 +2,7 @@
   <div id="app">
 
     <!-- include our nav -->
+    <h3> WELCOME TO OMIA MANAGERS PORTAL </h3>
 
     <router-view></router-view>
   </div>
@@ -9,7 +10,15 @@
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+
+  methods: {
+
+  },
+
+  components: {
+
+  }
 }
 </script>
 
