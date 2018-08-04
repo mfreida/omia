@@ -2,6 +2,11 @@
 
 > do routing, test props in vue js 2x
 
+this app (omia) simulated a manager task management platform using vue js 2x.
+we used props, components, routing, state management which are features of vue.
+we used https://jsonplaceholder.typicode.com/ to get our api data.
+
+
 ## Build Setup
 
 ``` bash

@@ -1,26 +1,49 @@
 <template>
   <div class="user_info">
-    <div> {{ user.user.name }} </div>
-    {{ user.todos }}
-    <br><br>
-    {{ user.user }}
 
-    <!-- v-for="(todo, index) in user.todos" v-bind -->
-    <!-- display our todos -->
     <div class="row">
-      <div class="todo_holder col-md-3" v-for="(todo, index) in user.todos" v-bind:key="index">
-        <div class="card" style="height:200px; margin-right:5px; margin-left:5px; margin-bottom: 5px">
+      <div class="col-md-1"></div>
+      <div class="col-md-10">
+        <p> Showing tasks for  <strong> {{ user.user.name }} </strong></p>
+        <p> Email {{ user.user.email }} </p>
+        <p> Phone {{ user.user.phone }} </p>
+      </div>
+      <div class="col-md-1"></div>
+    </div>
+
+    <!-- show completed first -->
+    <p class=""><strong> COMPLETED TASKS </strong></p>
+    <!-- display our todos -->
+    <div class="row" id="complete">
+      <div class="card col-md-3" v-for="(todo, index) in userCompleted" :key="index" v-show="todo.completed" style="height:200px; margin-right:0px; margin-left:0px; margin-bottom: 5px">
+
          <div class="card-header">
-          <span style="margin-right:20px"> <strong>Task #{{ todo.todo.id }}</strong> </span>
-          <span v-show="todo.todo.completed" class="badge badge-success"> Done </span>
-          <span v-show="!todo.todo.completed" class="badge badge-danger"> Pending </span>
+          <span style="margin-right:20px"> <strong>Task #{{ todo.id }}</strong> </span>
+          <span v-show="todo.completed" class="badge badge-success"> Done </span>
+          <span v-show="!todo.completed" class="badge badge-danger"> Pending </span>
          </div>
          <div class="card-body">
-          <p class="task-data"> TASK {{ todo.todo.title }} </p>
-          <p class="task-data"> COMPLETED {{ todo.todo.completed }} </p>
-          <p class="task-data"> EMPLOYEE {{ todo.owner.name }} </p>
+           <p > TASK {{ todo.title }} </p>
+           <p > COMPLETED {{ todo.completed }} </p>
          </div>
-        </div>
+      </div>
+    </div>
+
+    <!-- show incompleted next -->
+    <p class=""><strong> INCOMPLETED TASKS  </strong></p>
+    <!-- display our todos -->
+    <div class="row" id="incomplete">
+      <div class="card col-md-3" v-for="(todo, index) in userInCompleted" :key="index" v-show="!todo.completed" style="height:200px; margin-right:0px; margin-left:0px; margin-bottom: 5px">
+
+         <div class="card-header">
+          <span style="margin-right:20px"> <strong>Task #{{ todo.id }}</strong> </span>
+          <span v-show="todo.completed" class="badge badge-success"> Done </span>
+          <span v-show="!todo.completed" class="badge badge-danger"> Pending </span>
+         </div>
+         <div class="card-body">
+           <p > TASK {{ todo.title }} </p>
+           <p > COMPLETED {{ todo.completed }} </p>
+         </div>
       </div>
     </div>
 
@@ -35,6 +58,9 @@ export default {
     return {
       user_id: '',
       user: {},
+      userTodos: {},
+      userCompleted: {},
+      userInCompleted: {},
       base_url: 'https://jsonplaceholder.typicode.com/'
     }
   }, // end of data function
@@ -59,9 +85,13 @@ export default {
       this.$http.get(this.base_url + 'todos')
         .then((result) => {
           let tempTodos = result.body
-          this.user = { 'user': user, 'todos': tempTodos.filter((tempTodo) => { return tempTodo.userId === user.id }) }
+          this.userTodos = tempTodos.filter((tempTodo) => { return tempTodo.userId === user.id })
+          this.user = { 'user': user, 'todos': this.userTodos }
           console.log('got data')
-          console.log(user)
+          console.log(this.userTodos)
+
+          this.userCompleted = this.user.todos.filter((todo) => { return todo.completed })
+          this.userInCompleted = this.user.todos.filter((todo) => { return !todo.completed })
         })
     }
 
@@ -75,5 +105,11 @@ export default {
 </script>
 
 <style>
-
+#complete{
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+#incomplete{
+  margin-bottom: 20px;
+}
 </style>
