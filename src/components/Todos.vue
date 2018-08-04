@@ -16,6 +16,8 @@
     <!-- display our todos -->
     <todo-list-holder :todos="todos"> </todo-list-holder>
 
+    <p v-show="hasError"> {{ errorMsg }} </p>
+
   </div>
 </template>
 
@@ -28,6 +30,8 @@ export default {
   data () {
     return {
       todos: {},
+      hasError: false,
+      errorMsg: '',
       todos_url: 'https://jsonplaceholder.typicode.com/todos',
       base_url: 'https://jsonplaceholder.typicode.com/'
     }
@@ -61,11 +65,24 @@ export default {
     set_users (tempTodos) {
       this.$http.get(this.base_url + 'users')
         .then((result) => {
-          let tempUsers = result.body
-          console.log('users')
-          // console.log(tempUsers)
-          this.todos = tempTodos.map((tempTodo) => { return { 'todo': tempTodo, 'owner': tempUsers.filter((tempUser) => { return tempUser.id === tempTodo.userId })[0] } })
+          if (result.body !== '') {
+            let tempUsers = result.body
+            console.log('users')
+            // console.log(tempUsers)
+            this.todos = tempTodos.map((tempTodo) => { return { 'todo': tempTodo, 'owner': tempUsers.filter((tempUser) => { return tempUser.id === tempTodo.userId })[0] } })
+          } else {
+            this.hasError = true
+            this.errorMsg = 'WE HAVE A NETWORK PROBLEM. PLEASE TRY AGAIN'
+          }
           console.log(this.todos)
+        }, (result) => {
+          this.hasError = true
+          this.errorMsg = 'WE HAVE A NETWORK PROBLEM. PLEASE TRY AGAIN'
+        }).catch((error) => {
+          console.log('got error')
+          console.log(error)
+          this.hasError = true
+          this.errorMsg = 'WE HAVE A NETWORK PROBLEM. PLEASE TRY AGAIN'
         })
     } // end of set_users
 

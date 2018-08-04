@@ -37,6 +37,7 @@ export default {
     }, // end of goToDetailsPage function
 
     // return a list of todos that are needed after search
+    // push to user/tasks
     getUserTasks (searchUserName) {
       console.log('search_user_name emitted in todolist_holder.vue')
       console.log('get tasks for ' + searchUserName)
